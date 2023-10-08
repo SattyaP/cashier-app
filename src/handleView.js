@@ -47,7 +47,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 loader.style.display = "none";
                 productList.style.display = "";
             } catch (error) {
-                console.error('Error fetching products:', error);
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `${error}`,
+                    confirmButtonColor: '#0d6efd',
+                    confirmButtonText: 'Yes, reload'
+                }).then((r) => {
+                    if (r.isConfirmed) {
+                        loadProducts()
+                    }
+                })
             }
         }
 
@@ -149,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     formdata.append(
                                         "image_product",
                                         productImage.files[0],
-                                        productImage.files[0] ?.path
+                                        productImage.files[0]?.path
                                     );
                                 }
 
