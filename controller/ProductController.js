@@ -82,7 +82,7 @@ class ProductController {
             myHeaders.append("Authorization", `Bearer ${this.authToken}`);
 
             const requestOptions = {
-                method: 'PUT',
+                method: 'POST',
                 headers: myHeaders,
                 body: updatedData,
                 redirect: 'follow'
