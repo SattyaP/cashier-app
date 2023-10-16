@@ -1,17 +1,12 @@
-const {
-  app,
-  BrowserWindow,
-  ipcMain,
-  Menu
-} = require('electron');
-const path = require('path');
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const path = require("path");
 
-if (require('electron-squirrel-startup')) {
+if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
 let mainWindow;
-let createWindow; 
+let createWindow;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -20,12 +15,18 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: !app.isPackaged
+      devTools: !app.isPackaged,
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  app.isPackaged && Menu.setApplicationMenu(null)
+  mainWindow.loadFile(path.join(__dirname, "index.html"));
+  app.isPackaged && Menu.setApplicationMenu(null);
+
+  mainWindow.on("closed", () => {
+    if (createWindow) {
+      createWindow.close();
+    }
+  });
 }
 
 function createCreateWindow() {
@@ -39,29 +40,29 @@ function createCreateWindow() {
       },
     });
 
-    createWindow.loadFile(path.join(__dirname, 'create.html'));
+    createWindow.loadFile(path.join(__dirname, "create.html"));
 
-    createWindow.on('closed', () => {
-      createWindow = null; 
+    createWindow.on("closed", () => {
+      createWindow = null;
     });
   }
 }
 
-app.on('ready', createMainWindow);
+app.on("ready", createMainWindow);
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (!mainWindow) {
     createMainWindow();
   }
 });
 
-ipcMain.on('create-data', () => {
+ipcMain.on("create-data", () => {
   createCreateWindow();
 });
 

@@ -114,6 +114,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("qty").value = data.qty
 
                     const listCategory = document.querySelector('[name="category_id"]');
+                    listCategory.innerHTML = "";
+                    
                     const categories = await categoryController.getCategory();
                     categories.forEach((category) => {
                         const option = document.createElement("option");

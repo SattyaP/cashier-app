@@ -17,6 +17,12 @@ class ProductController {
             };
 
             const response = await fetch(`${this.apiEndPoint}`, requestOptions);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`HTTP Error: ${response.status} - ${errorData.message}`);
+            }
+            
             return await response.json();
         } catch (error) {
             console.error('Error creating product:', error);
@@ -80,21 +86,28 @@ class ProductController {
         try {
             const myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${this.authToken}`);
-
+    
             const requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
                 body: updatedData,
                 redirect: 'follow'
             };
-
+    
             const response = await fetch(`${this.apiEndPoint}${productId}`, requestOptions);
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`HTTP Error: ${response.status} - ${errorData.message}`);
+            }
+    
             return await response.json();
         } catch (error) {
             console.error(`Error updating product ${productId}:`, error);
             throw error;
         }
     }
+    
 
     async deleteProduct(productId) {
         try {
